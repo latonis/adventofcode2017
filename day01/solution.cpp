@@ -1,7 +1,6 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <unordered_map>
 
 void part_one() {
     std::ifstream inputFile("./input");
@@ -38,7 +37,7 @@ void part_two() {
         getline(inputFile, line);
 
         for (int i = 0; i < line.size(); i++) {
-            if (line[i] == line[(i + line.size()/2) % line.size()]) {
+            if (line[i] == line[(i + line.size() / 2) % line.size()]) {
                 sum += line[i] - '0';
             }
         }
