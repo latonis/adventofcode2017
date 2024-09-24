@@ -35,3 +35,5 @@
 # Solution for AoC
 solution
 */input
+*/*.html
+*/*.css
