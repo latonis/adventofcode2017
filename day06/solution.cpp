@@ -38,7 +38,6 @@ std::vector<int> distribute(std::vector<int> buckets) {
         buckets[i] += 1;
         bucket_total--;
     }
-    print_vec(buckets);
     return buckets;
 }
 
@@ -86,14 +85,21 @@ void part_two() {
                        std::ranges::to<std::vector>();
 
         std::map<std::vector<int>, int> seen;
+
         while (!seen.contains(buckets)) {
-            seen.insert({buckets, 1});
+            seen.insert({buckets, count});
             buckets = distribute(buckets);
             count += 1;
         }
-    }
 
-    std::cout << "Total steps to repeat: " << count << std::endl;
+        int ans = 0;
+        auto v = seen.find(buckets);
+        if (v != seen.end()) {
+            ans = count - v->second;
+        }
+
+        std::cout << "Total steps to loop: " << ans << std::endl;
+    }
 }
 
 int main() {
