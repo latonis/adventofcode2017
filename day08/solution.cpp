@@ -64,10 +64,12 @@ struct instruction {
 
 struct instruction_handler {
     std::unordered_map<std::string, int>& registers;
+    int max_val;
 
     void handle(instruction ins) {
         if (registers.find(ins.reg) == registers.end()) {
             registers.insert({ins.reg, 0});
+            max_val = 0;
         }
 
         if (registers.find(ins.check_reg) == registers.end()) {
@@ -77,9 +79,13 @@ struct instruction_handler {
         if (ins.compare(registers.find(ins.check_reg)->second,
                         ins.conditional_val, ins.conditional_op)) {
             auto cur_val = registers.find(ins.reg)->second;
+            auto new_val = ins.increase ? cur_val + ins.val : cur_val - ins.val;
 
-            registers.insert_or_assign(
-                ins.reg, ins.increase ? cur_val + ins.val : cur_val - ins.val);
+            if (new_val > max_val) {
+                max_val = new_val;
+            }
+
+            registers.insert_or_assign(ins.reg, new_val);
         }
     }
 
@@ -123,9 +129,27 @@ void part_one() {
 }
 
 void part_two() {
-    std::ifstream inputFile("./test-input");
-    int count = 0;
-    std::vector<int> v;
+    std::ifstream inputFile("./input");
+    std::vector<Node> v;
+    std::unordered_map<std::string, int>* registers =
+        new std::unordered_map<std::string, int>();
+    instruction_handler handler(*registers);
+    std::vector<instruction> instructions;
+
+    if (inputFile.is_open()) {
+        for (std::string line; std::getline(inputFile, line);) {
+            auto ins_set = line | std::ranges::views::split(' ') |
+                           std::views::transform(
+                               [](auto v) { return std::string_view(v); }) |
+                           std::ranges::to<std::vector>();
+
+            handler.handle(instruction(ins_set));
+        }
+    }
+    std::cout << "Max value of registers at any time: " << handler.max_val
+              << "\n";
+
+    free(registers);
 }
 
 int main() {
