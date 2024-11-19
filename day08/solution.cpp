@@ -107,39 +107,32 @@ struct instruction_handler {
 };
 
 void part_one() {
-    std::ifstream inputFile("./input");
     std::vector<Node> v;
     instruction_handler handler;
     std::vector<instruction> instructions;
+    for (std::string line : get_input_all_lines("./input")) {
+        auto ins_set =
+            line | std::ranges::views::split(' ') |
+            std::views::transform([](auto v) { return std::string_view(v); }) |
+            std::ranges::to<std::vector>();
 
-    if (inputFile.is_open()) {
-        for (std::string line; std::getline(inputFile, line);) {
-            auto ins_set = line | std::ranges::views::split(' ') |
-                           std::views::transform(
-                               [](auto v) { return std::string_view(v); }) |
-                           std::ranges::to<std::vector>();
-
-            handler.handle(instruction(ins_set));
-        }
+        handler.handle(instruction(ins_set));
     }
     std::cout << "Max value of registers: " << handler.find_max() << "\n";
 }
 
 void part_two() {
-    std::ifstream inputFile("./input");
     std::vector<Node> v;
     instruction_handler handler;
     std::vector<instruction> instructions;
 
-    if (inputFile.is_open()) {
-        for (std::string line; std::getline(inputFile, line);) {
-            auto ins_set = line | std::ranges::views::split(' ') |
-                           std::views::transform(
-                               [](auto v) { return std::string_view(v); }) |
-                           std::ranges::to<std::vector>();
+    for (std::string line : get_input_all_lines("./input")) {
+        auto ins_set =
+            line | std::ranges::views::split(' ') |
+            std::views::transform([](auto v) { return std::string_view(v); }) |
+            std::ranges::to<std::vector>();
 
-            handler.handle(instruction(ins_set));
-        }
+        handler.handle(instruction(ins_set));
     }
     std::cout << "Max value of registers at any time: " << handler.max_val
               << "\n";
