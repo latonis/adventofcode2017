@@ -16,12 +16,13 @@ struct stream {
     int index;
     int score;
     int nest_level;
+    int garbage_characters;
 
     void parse() {
         index = 0;
         score = 0;
         nest_level = 0;
-        std::cout << "Starting string for eval: " << input << "\n";
+        garbage_characters = 0;
 
         while (index < input.length()) {
             if (input[index] == '<') {
@@ -38,9 +39,6 @@ struct stream {
                 index++;
             }
         }
-
-        std::cout << "Final string for eval: " << input << "\n";
-        std::cout << "Scoring system: " << score << "\n";
     }
     /// @brief iff current char is < then go brr until >
     void collect_garbage() {
@@ -48,6 +46,7 @@ struct stream {
         while (tmp_index < input.length()) {
             if (input[tmp_index] == '>') {
                 input.erase(index, (tmp_index - index) + 1);
+                garbage_characters += tmp_index - index - 1;
                 return;
             } else if (input[tmp_index] == '!') {
                 handle_exclaim(tmp_index);
@@ -64,15 +63,17 @@ void part_one() {
     auto line = get_input_one_line("./input");
     stream input_stream(line);
     input_stream.parse();
+
+    std::cout << "Scoring system: " << input_stream.score << "\n";
 }
 
 void part_two() {
     auto line = get_input_one_line("./input");
+    stream input_stream(line);
+    input_stream.parse();
 
-    auto ins_set =
-        line | std::ranges::views::split(' ') |
-        std::views::transform([](auto v) { return std::string_view(v); }) |
-        std::ranges::to<std::vector>();
+    std::cout << "Total amount of removed garbage: "
+              << input_stream.garbage_characters << "\n";
 }
 
 int main() {
