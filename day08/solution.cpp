@@ -63,7 +63,7 @@ struct instruction {
 };
 
 struct instruction_handler {
-    std::unordered_map<std::string, int>& registers;
+    std::unordered_map<std::string, int> registers;
     int max_val;
 
     void handle(instruction ins) {
@@ -109,9 +109,7 @@ struct instruction_handler {
 void part_one() {
     std::ifstream inputFile("./input");
     std::vector<Node> v;
-    std::unordered_map<std::string, int>* registers =
-        new std::unordered_map<std::string, int>();
-    instruction_handler handler(*registers);
+    instruction_handler handler;
     std::vector<instruction> instructions;
 
     if (inputFile.is_open()) {
@@ -125,15 +123,12 @@ void part_one() {
         }
     }
     std::cout << "Max value of registers: " << handler.find_max() << "\n";
-    free(registers);
 }
 
 void part_two() {
     std::ifstream inputFile("./input");
     std::vector<Node> v;
-    std::unordered_map<std::string, int>* registers =
-        new std::unordered_map<std::string, int>();
-    instruction_handler handler(*registers);
+    instruction_handler handler;
     std::vector<instruction> instructions;
 
     if (inputFile.is_open()) {
@@ -148,8 +143,6 @@ void part_two() {
     }
     std::cout << "Max value of registers at any time: " << handler.max_val
               << "\n";
-
-    free(registers);
 }
 
 int main() {
