@@ -7,6 +7,13 @@ void print_vec(std::vector<int> v) {
     std::cout << "\n";
 }
 
+void print_vec_hex(std::vector<int> v) {
+    for (auto i : v) {
+        std::cout << std::hex << i;
+    }
+    std::cout << "\n";
+}
+
 std::string get_input_one_line(std::string filepath) {
     std::ifstream inputFile(filepath);
     std::string line;

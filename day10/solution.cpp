@@ -107,10 +107,7 @@ void part_two() {
     knot_hash attempt = knot_hash(v);
     attempt.calculate_dense_hash();
     std::cout << "Knot hash: ";
-    for (auto i : attempt.dense_hash) {
-        std::cout << std::hex << i;
-    }
-    std::cout << "\n";
+    print_vec_hex(attempt.dense_hash);
 }
 
 int main() {
