@@ -59,7 +59,6 @@ struct knot_hash {
             // Increase the skip size by one.
             skip_size += 1;
         }
-        std::cout << "Value to verify: " << v[0] * v[1] << "\n";
     }
 };
 
@@ -75,18 +74,46 @@ void part_one() {
 
     knot_hash attempt = knot_hash(lengths);
     attempt.hash();
+    std::cout << "First two entries: " << attempt.v[0] << ", " << attempt.v[1]
+              << "\n";
 }
 
 void part_two() {
-    auto line = get_input_one_line("./input");
-    auto ins_set =
-        line | std::ranges::views::split(' ') |
-        std::views::transform([](auto v) { return std::string_view(v); }) |
-        std::ranges::to<std::vector>();
+    auto lengths = get_input_one_line("./input");
+    std::vector<int> v;
+    std::vector<int> to_end = {17, 31, 73, 47, 23};
+
+    for (auto c : lengths) {
+        v.emplace_back(c);
+    }
+
+    v.insert(v.end(), to_end.begin(), to_end.end());
+
+    knot_hash attempt = knot_hash(v);
+
+    for (int i = 0; i < 64; i++) {
+        attempt.hash();
+    }
+
+    std::vector<int> dense_hash;
+
+    for (int x = 0; x < 16; x++) {
+        int val = 0;
+        for (int i = 0 + (x * 16); i < 16 + (x * 16); i++) {
+            val = attempt.v[i] ^ val;
+        }
+        dense_hash.push_back(val);
+    }
+
+    std::cout << "Knot hash: ";
+    for (auto i : dense_hash) {
+        std::cout << std::hex << i;
+    }
+    std::cout << "\n";
 }
 
 int main() {
     part_one();
-    // part_two();
+    part_two();
     return 0;
 }
