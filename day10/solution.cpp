@@ -16,6 +16,7 @@ struct knot_hash {
     int current_pos;
     int skip_size;
     std::vector<int> lengths;
+    std::vector<int> dense_hash;
 
     knot_hash(std::vector<int> in) {
         current_pos = 0;
@@ -24,6 +25,20 @@ struct knot_hash {
 
         v = std::vector<int>(256);
         std::iota(std::begin(v), std::end(v), 0);
+    }
+
+    void calculate_dense_hash() {
+        for (int i = 0; i < 64; i++) {
+            hash();
+        }
+
+        for (int x = 0; x < 16; x++) {
+            int val = 0;
+            for (int i = 0 + (x * 16); i < 16 + (x * 16); i++) {
+                val = v[i] ^ val;
+            }
+            dense_hash.push_back(val);
+        }
     }
 
     void hash() {
@@ -90,23 +105,9 @@ void part_two() {
     v.insert(v.end(), to_end.begin(), to_end.end());
 
     knot_hash attempt = knot_hash(v);
-
-    for (int i = 0; i < 64; i++) {
-        attempt.hash();
-    }
-
-    std::vector<int> dense_hash;
-
-    for (int x = 0; x < 16; x++) {
-        int val = 0;
-        for (int i = 0 + (x * 16); i < 16 + (x * 16); i++) {
-            val = attempt.v[i] ^ val;
-        }
-        dense_hash.push_back(val);
-    }
-
+    attempt.calculate_dense_hash();
     std::cout << "Knot hash: ";
-    for (auto i : dense_hash) {
+    for (auto i : attempt.dense_hash) {
         std::cout << std::hex << i;
     }
     std::cout << "\n";
