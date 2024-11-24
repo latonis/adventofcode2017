@@ -13,6 +13,7 @@
 struct traveler {
     float x = 0;
     float y = 0;
+    float max_distance = 0;
 
     void travel(std::vector<std::string_view> directions) {
         for (auto direction : directions) {
@@ -37,6 +38,11 @@ struct traveler {
                 y -= .5;
                 x += .5;
             }
+
+            float new_distance = get_distance();
+            if (new_distance > max_distance) {
+                max_distance = new_distance;
+            }
         }
     }
 
@@ -45,7 +51,7 @@ struct traveler {
 
 void part_one() {
     auto directions =
-        get_input_one_line("./test-input") | std::ranges::views::split(',') |
+        get_input_one_line("./input") | std::ranges::views::split(',') |
         std::views::transform([](auto v) { return std::string_view(v); }) |
         std::ranges::to<std::vector>();
 
@@ -55,11 +61,14 @@ void part_one() {
 }
 
 void part_two() {
-    auto line = get_input_one_line("./input");
-    auto ins_set =
-        line | std::ranges::views::split(' ') |
+    auto directions =
+        get_input_one_line("./input") | std::ranges::views::split(',') |
         std::views::transform([](auto v) { return std::string_view(v); }) |
         std::ranges::to<std::vector>();
+
+    traveler t;
+    t.travel(directions);
+    std::cout << "Max distance traveled: " << t.max_distance << "\n";
 }
 
 int main() {
