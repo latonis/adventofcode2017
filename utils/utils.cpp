@@ -33,3 +33,9 @@ std::vector<std::string> get_input_all_lines(std::string filepath) {
     }
     return v;
 }
+
+int sv_to_int(std::string_view r) {
+    int i = 0;
+    std::from_chars(r.data(), r.data() + r.size(), i);
+    return i;
+}
