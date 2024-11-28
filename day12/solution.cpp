@@ -40,12 +40,12 @@ void part_one() {
     std::set<std::vector<std::string>> groups;
 
     for (std::string line : get_input_all_lines("./input")) {
-        auto ins_set = line | std::views::split(std::string(" <-> ")) |
-                       std::views::transform([](auto r) {
-                           return std::string(r.data(), r.size());
-                       });
+        auto asVec = line | std::views::split(std::string(" <-> ")) |
+                     std::views::transform([](auto r) {
+                         return std::string(r.data(), r.size());
+                     }) |
+                     std::ranges::to<std::vector<std::string>>();
 
-        auto asVec = std::vector(ins_set.begin(), ins_set.end());
         std::set<std::string> d;
 
         if (asVec[1].contains(",")) {
@@ -79,12 +79,12 @@ void part_two() {
     std::set<std::string> groups;
 
     for (std::string line : get_input_all_lines("./input")) {
-        auto ins_set = line | std::views::split(std::string(" <-> ")) |
-                       std::views::transform([](auto r) {
-                           return std::string(r.data(), r.size());
-                       });
+        auto asVec = line | std::views::split(std::string(" <-> ")) |
+                     std::views::transform([](auto r) {
+                         return std::string(r.data(), r.size());
+                     }) |
+                     std::ranges::to<std::vector<std::string>>();
 
-        auto asVec = std::vector(ins_set.begin(), ins_set.end());
         std::set<std::string> d;
 
         if (asVec[1].contains(",")) {
